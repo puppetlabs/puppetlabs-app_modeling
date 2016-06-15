@@ -1,0 +1,15 @@
+{
+  "name": "puppetlabs-app_modeling",
+  "version": "0.1.0",
+  "author": "puppetlabs",
+  "summary": "Tools for application modeling",
+  "license": "Apache-2.0",
+  "source": "https://github.com/puppetlabs/puppetlabs-app_modeling",
+  "project_page": "https://github.com/puppetlabs/puppetlabs-app_modeling",
+  "issues_url": "https://tickets.puppetlabs.com/MODULES",
+  "dependencies": [
+    {"name":"puppetlabs-stdlib","version_requirement":">= 1.0.0"}
+  ],
+  "data_provider": null
+}
+
