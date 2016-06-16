@@ -3,81 +3,122 @@
 #### Table of Contents
 
 1. [Description](#description)
-1. [Setup - The basics of getting started with app_modeling](#setup)
-    * [What app_modeling affects](#what-app_modeling-affects)
-    * [Setup requirements](#setup-requirements)
-    * [Beginning with app_modeling](#beginning-with-app_modeling)
-1. [Usage - Configuration options and additional functionality](#usage)
-1. [Reference - An under-the-hood peek at what the module is doing and how](#reference)
-1. [Limitations - OS compatibility, etc.](#limitations)
-1. [Development - Guide for contributing to the module](#development)
+1. [Usage - Example uses of the module](#usage)
+1. [Reference - Parameter and arguments](#reference)
 
 ## Description
 
-Start with a one- or two-sentence summary of what the module does and/or what
-problem it solves. This is your 30-second elevator pitch for your module.
-Consider including OS/Puppet version it works with.
-
-You can give more descriptive information in a second paragraph. This paragraph
-should answer the questions: "What does this module *do*?" and "Why would I use
-it?" If your module has a range of functionality (installation, configuration,
-management, etc.), this is the time to mention it.
-
-## Setup
-
-### What app_modeling affects **OPTIONAL**
-
-If it's obvious what your module touches, you can skip this section. For
-example, folks can probably figure out that your mysql_instance module affects
-their MySQL instances.
-
-If there's more that they should know about, though, this is the place to mention:
-
-* A list of files, packages, services, or operations that the module will alter,
-  impact, or execute.
-* Dependencies that your module automatically installs.
-* Warnings or other important notices.
-
-### Setup Requirements **OPTIONAL**
-
-If your module requires anything extra before setting up (pluginsync enabled,
-etc.), mention it here.
-
-If your most recent release breaks compatibility or requires particular steps
-for upgrading, you might want to include an additional "Upgrading" section
-here.
-
-### Beginning with app_modeling
-
-The very basic steps needed for a user to get the module up and running. This
-can include setup steps, if necessary, or it can be an example of the most
-basic use of the module.
+This module contains a collection of puppet extenstions helpful for modeling
+cross node applications in puppet code. These include a set of types and
+providers for common capability resources and functions useful for defining
+dynamic applications.
 
 ## Usage
 
-This section is where you describe how to customize, configure, and do the
-fancy stuff with your module here. It's especially helpful if you include usage
-examples and code samples for doing things with your module.
+### Capability resources
 
+There are two capability resource types included in the module `http` and
+`database`. They can be used to produce and consume resource in application
+components. You could use these to create an application component for a web
+server that consumes a database and produces an http resource like in the
+following example:
+
+```puppet
+Wordpress_app::Web consumes Database{
+  db_host     => $host,
+  db_name     => $database,
+  db_user     => $user,
+  db_password => $password,
+}
+Wordpress_app::Web produces Http {
+  ip   => $interface ? { /\S+/ => $::networking['interfaces'][$interface]['ip'], default => $::ipaddress },
+  port => $web_port,
+  host => $::hostname,
+}
+define wordpress_app::web(
+  String $db_host,
+  String $db_name,
+  String $db_user,
+  String $db_password,
+  String $web_port = '8080',
+) {
+  # puppet code to set up this component
+}
+```
+
+### Dynamic Application Functions
+
+This module also includes some functions that can make it easier to write dynamic applications where some components are defined in the declaration. For example sometimes components are optional or there may be a variable number of them. In these cases you can use `collect_component_titles` to find whether a component exists in this instance and create it.
+
+```puppet
+# Create an lb component for each declared load balancer.
+$lb_components = collect_component_titles($nodes, Wordpress_app::Lb)
+$lb_components.each |$comp_name| {
+  wordpress_app::lb { $comp_name:
+    balancermembers => $web_https,
+    lb_options      => $lb_options,
+    ipaddress       => $lb_ipaddress,
+    port            => $lb_port,
+    balance_mode    => $lb_balance_mode,
+    require         => $web_https,
+    export          => Http["lb-${name}"],
+  }
+}
+```
 ## Reference
 
-Here, include a complete list of your module's classes, types, providers,
-facts, along with the parameters for each. Users refer to this section (thus
-the name "Reference") to find specific details; most users don't read it per
-se.
+### Types
 
-## Limitations
+#### `http`
 
-This is where you list OS compatibility, version compatibility, etc. If there
-are Known Issues, you might want to include them under their own heading here.
+The http type allows
 
-## Development
+##### Parameters
 
-Since your module is awesome, other users will want to play with it. Let them
-know what the ground rules for contributing are.
+* host - The hostname the resource is available on (default: '127.0.0.1')
+* port - The port to the resource is aviable on (default: '80')
+* ip - the ip adress of the resource
+*** To add?
+* ssl - is this resource an ssl (default: 'false')
+* root_path - the path to the root of this resource (default: '/')
+* health_check - the path to the health_check for this resource (default: '/')
 
-## Release Notes/Contributors/Etc. **Optional**
+##### Providers
 
-If you aren't using changelog, put your release notes here (though you should
-consider using changelog). You can also add any additional sections you feel
-are necessary or important to include here. Please use the `## ` header.
+*`tcp` - This provider attempts to make a tcp connection to the port.
+*** To add?
+* http - Verify the `health_chech` page returns a 200 status code.
+
+#### `database`
+
+* host - the host the database is available at (default: '127.0.0.1')
+* port - the port the databse is available at (defualt: '5432')
+* user - the user to connect to the database as
+* password - the password to connect to the database with
+* database - the name of the database to connect to.
+* instance - the instnace of the datbase to connect to.
+* timeout - The timeout to use when attempting to check the database(default: 60)
+* ping_interval - How long to wait before retrying a connection(default: 1)
+
+##### Providers
+
+* `tcp` - This provider attempts to make a tcp connection to the port.
+* `postgres` - This will connect to a postgres database.
+
+### Functions
+
+#### `collect_component_titles`
+
+Searches an applications node hash for all components of a given type and returns an array of their titles.
+
+```
+collect_component_titles($nodes, Wordpress_app::Web)
+```
+
+#### `collect_component_nodes`
+
+Searches an applications node hash for all nodes that have a given component assigned to them and returns an array of the nodes titles.
+
+```
+collect_component_nodes($nodes, Wordpress_app::Web)
+```
