@@ -5,9 +5,12 @@
 #
 # @param nodes [Hash] an applications $nodes hash
 # @param component [Type] the component type to match
-Puppet::Functions.create_function(:collect_component_nodes) do
-  def collect_component_nodes(nodes, component)
-    target = component.type_name
+module Puppet::Parser::Functions
+  newfunction(:collect_component_nodes, type: :rvalue) do |args|
+    nodes = args[0]
+    component = args [1]
+    Raise Puppet::ParseError, "collect_component_nodes requires a nodes hash and component" unless nodes && component
+    target = component.type
     nodes.map do |node, components|
       components = [components] unless components.kind_of?(Array)
       if components.any? {|comp| comp.type == target}
