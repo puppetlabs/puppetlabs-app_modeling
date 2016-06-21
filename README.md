@@ -87,6 +87,7 @@ The http type allows
 
 #### `database`
 
+* datbase - the name of the database
 * host - the host the database is available at (default: '127.0.0.1')
 * port - the port the databse is available at (defualt: '5432')
 * user - the user to connect to the database as

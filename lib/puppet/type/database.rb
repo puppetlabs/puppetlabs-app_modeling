@@ -9,6 +9,10 @@ Puppet::Type.newtype :database, :is_capability => true do
     desc 'The name of the resource'
   end
 
+  newparam(:database) do
+    desc 'The database name'
+  end
+
   newparam(:host) do
     desc 'The hostname of the server'
     defaultto '127.0.0.1'
