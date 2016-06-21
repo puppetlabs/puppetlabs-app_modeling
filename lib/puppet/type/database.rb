@@ -51,6 +51,5 @@ Puppet::Type.newtype :database, :is_capability => true do
 
   newparam :user
   newparam :password
-  newparam :database
   newparam :instance
 end
