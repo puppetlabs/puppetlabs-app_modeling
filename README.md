@@ -78,10 +78,6 @@ The http type allows
 * host - The hostname the resource is available on (default: '127.0.0.1')
 * port - The port to the resource is aviable on (default: '80')
 * ip - the ip adress of the resource
-*** To add?
-* ssl - is this resource an ssl (default: 'false')
-* root_path - the path to the root of this resource (default: '/')
-* health_check - the path to the health_check for this resource (default: '/')
 
 ##### Providers
 
