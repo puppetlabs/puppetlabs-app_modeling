@@ -1,7 +1,7 @@
 require 'puppet/provider'
 
 # PSQL Health Checks
-Puppet::Type.type(:sql).provide(:postgresql) do
+Puppet::Type.type(:database).provide(:postgresql) do
   confine :feature => :postgres
 
   def check(database, host, port, password, user, timeout, ping_interval)
