@@ -43,7 +43,7 @@ define wordpress_app::web(
 
 ### Dynamic application functions
 
-The functions included in this module make it easier to write dynamic applications where some components are defined in the declaration. For example, you can use the `collect_component_titles` to determine if a component exists and, if it doesn't, the function will create it.
+The functions included in this module make it easier to write dynamic applications where some components are defined in the declaration. For example, you can use the `collect_component_titles` function to determine if a component exists and, if it doesn't, the function will create it.
 
 ```puppet
 # Create an lb component for each declared load balancer.
@@ -83,7 +83,7 @@ The `http` type allows the following parameters and providers:
 
 The `database` type allows the following parameters and providers:
 
-##### Providers
+##### Parameters
 
 * `database`: The name of the database to connect to. 
 * `host`: The hostname of the node where the database is available (default: `127.0.0.1`).
