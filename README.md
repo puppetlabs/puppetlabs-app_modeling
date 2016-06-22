@@ -1,6 +1,6 @@
 # app_modeling
 
-#### Table of Contents
+#### Table of contents
 
 1. [Description](#description)
 1. [Usage - Example uses of the module](#usage)
@@ -8,20 +8,15 @@
 
 ## Description
 
-This module contains a collection of puppet extenstions helpful for modeling
-cross node applications in puppet code. These include a set of types and
-providers for common capability resources and functions useful for defining
-dynamic applications.
+This module contains a collection of Puppet extensions for modeling cross-node applications in Puppet code. Included is a set of types and providers for common capability resources, and functions useful for defining dynamic applications.
 
 ## Usage
 
 ### Capability resources
 
-There are two capability resource types included in the module `http` and
-`database`. They can be used to produce and consume resource in application
-components. You could use these to create an application component for a web
-server that consumes a database and produces an http resource like in the
-following example:
+This module contains two capability resource types: `http` and `database`. You can use these resource types to *produce* and *consume* resources in application components. 
+
+For example, the following code sample shows how you could use this module to create an application component for a web server that consumes a `database` resource and produces an `http` resource.
 
 ```puppet
 Wordpress_app::Web consumes Database{
@@ -42,13 +37,13 @@ define wordpress_app::web(
   String $db_password,
   String $web_port = '8080',
 ) {
-  # puppet code to set up this component
+  # Puppet code to set up this component
 }
 ```
 
-### Dynamic Application Functions
+### Dynamic application functions
 
-This module also includes some functions that can make it easier to write dynamic applications where some components are defined in the declaration. For example sometimes components are optional or there may be a variable number of them. In these cases you can use `collect_component_titles` to find whether a component exists in this instance and create it.
+This module also includes functions that make it easier to write dynamic applications where some components are defined in the declaration. For example, you can use the `collect_component_titles` to determine if a component exists and, if it doesn't, the application will create it.
 
 ```puppet
 # Create an lb component for each declared load balancer.
@@ -71,42 +66,40 @@ $lb_components.each |$comp_name| {
 
 #### `http`
 
-The http type allows
+The `http` type allows the following parameters and providers:
 
 ##### Parameters
 
-* host - The hostname the resource is available on (default: '127.0.0.1')
-* port - The port to the resource is aviable on (default: '80')
-* ip - the ip adress of the resource
+* `host`: The hostname of the node where the resource is available (default: `127.0.0.1`).
+* `port`: The port where the resource is available (default: `80`).
+* `ip`: The IP adress of the node where the resource is available.
 
 ##### Providers
 
-*`tcp` - This provider attempts to make a tcp connection to the port.
-*** To add?
-* http - Verify the `health_chech` page returns a 200 status code.
+*`tcp` - Attempts to make a TCP connection to the port where the resource is available.
+* `http` - Verifies the `health_check` page returns a `200` status code.
 
 #### `database`
 
-* datbase - the name of the database
-* host - the host the database is available at (default: '127.0.0.1')
-* port - the port the databse is available at (defualt: '5432')
-* user - the user to connect to the database as
-* password - the password to connect to the database with
-* database - the name of the database to connect to.
-* instance - the instnace of the datbase to connect to.
-* timeout - The timeout to use when attempting to check the database(default: 60)
-* ping_interval - How long to wait before retrying a connection(default: 1)
-
+* `database`: The database name of the database to connect to. 
+* `host`: The hostname of the node where the database is available (default: `127.0.0.1`).
+* `port`:  The port where the database is available (default: `5432`).
+* `user`: The user that will connect to the database.
+* `password`: The password used to connect to the database.
+* `instance`: The instance of the database to connect to.
+* `timeout`: The timeout, in seconds, to use when attempting to check the database (default: `60`).
+* `ping_interval`: How long to wait before retrying a connection (default: 1).
+ 
 ##### Providers
 
-* `tcp` - This provider attempts to make a tcp connection to the port.
-* `postgres` - This will connect to a postgres database.
+* `tcp` - This provider attempts to make a TCP connection to the port.
+* `postgres` - This provider connects to a PostgreSQL database.
 
 ### Functions
 
 #### `collect_component_titles`
 
-Searches an applications node hash for all components of a given type and returns an array of their titles.
+Searches the node hash of an application for all components of a given type and returns an array of their titles.
 
 ```
 collect_component_titles($nodes, Wordpress_app::Web)
@@ -114,7 +107,7 @@ collect_component_titles($nodes, Wordpress_app::Web)
 
 #### `collect_component_nodes`
 
-Searches an applications node hash for all nodes that have a given component assigned to them and returns an array of the nodes titles.
+Searches the node hash of an application for all nodes that have a given component assigned to them and returns an array of nodes titles.
 
 ```
 collect_component_nodes($nodes, Wordpress_app::Web)
