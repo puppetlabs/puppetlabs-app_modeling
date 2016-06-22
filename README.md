@@ -14,7 +14,7 @@ This module contains a collection of Puppet extensions for modeling cross-node a
 
 ### Capability resources
 
-This module contains two capability resource types: `http` and `database`. You can use these resource types to *produce* and *consume* resources in application components. 
+This module contains two capability resource types: `http` and `database`. You can use these resource types to *produce* and *consume* resources in application components.
 
 For example, the following code sample shows how you could use this module to create an application component for a web server that consumes a `database` resource and produces an `http` resource.
 
@@ -77,7 +77,6 @@ The `http` type allows the following parameters and providers:
 ##### Providers
 
 * `tcp`: This provider attempts to make a TCP connection to the port where the resource is available.
-* `http`: This provider verifies the `health_check` page returns a `200` status code.
 
 #### `database`
 
@@ -85,7 +84,7 @@ The `database` type allows the following parameters and providers:
 
 ##### Parameters
 
-* `database`: The name of the database to connect to. 
+* `database`: The name of the database to connect to.
 * `host`: The hostname of the node where the database is available (default: `127.0.0.1`).
 * `port`:  The port where the database is available (default: `5432`).
 * `user`: The user that connects to the database.
@@ -93,7 +92,7 @@ The `database` type allows the following parameters and providers:
 * `instance`: The instance of the database to connect to.
 * `timeout`: The timeout, in seconds, to use when attempting to check the database (default: `60`).
 * `ping_interval`: How long to wait before retrying a connection (default: 1).
- 
+
 ##### Providers
 
 * `tcp` - This provider attempts to make a TCP connection to the port.
