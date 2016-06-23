@@ -8,7 +8,7 @@
 
 ## Description
 
-This module contains a collection of Puppet extensions for modeling cross-node applications in Puppet code. Included is a set of types and providers for common capability resources and a set of functions useful for defining dynamic applications.
+This module contains a collection of Puppet extensions for modeling cross-node applications in Puppet code. Included is a set of types and providers for common capability resources and two functions useful for defining dynamic applications.
 
 ## Usage
 
