@@ -1,5 +1,4 @@
 Puppet::Type.newtype :database, :is_capability => true do
-
   ensurable do
     defaultvalues
     defaultto :present
