@@ -9,7 +9,7 @@ module Puppet::Parser::Functions
   newfunction(:collect_component_nodes, type: :rvalue) do |args|
     nodes = args[0]
     component = args [1]
-    Raise Puppet::ParseError, "collect_component_nodes requires a nodes hash and component" unless nodes && component
+    raise Puppet::ParseError, "collect_component_nodes requires a nodes hash and component" unless nodes && component
     target = component.type
     nodes.map do |node, components|
       components = [components] unless components.kind_of?(Array)
