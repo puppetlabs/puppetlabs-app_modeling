@@ -64,6 +64,11 @@ $lb_components.each |$comp_name| {
 
 ### Types
 
+#### `dependency`
+
+The dependency type passes no information and has no availabilty check. This is
+useful if you only care about order.
+
 #### `http`
 
 The `http` type allows the following parameters and providers:
@@ -115,3 +120,37 @@ This function searches the node hash of an application for all nodes that have a
 ```
 collect_component_nodes($nodes, Wordpress_app::Web)
 ```
+
+#### `create_node_order`
+
+This function can be used in the site block to create order only applications.
+It accepts a name for the application and a list of node layers. It creates an
+instance of app_modeling::node_order where the nodes at each layer depend on
+all the nodes in the previous layer.
+
+The following code will create a dependency between two nodes. Whenever these
+nodes are both in an orchestrator job node1 will run before node2. These nodes
+can also be targeted with `puppet job run --application
+App_modeling::Node_order['node1-node2']`.
+
+```puppet
+site {
+  create_node_order('node1-node2', ['node1.example.com', 'node2.example.com'])
+}
+```
+
+If you have a three layer web application with a database, some app_servers and
+a load balancer the following code would create an application for them. That
+application could then be deployed with orchestrator with `puppet job run
+--application App_modeling::Node_order['three_tier']`.
+
+```puppet
+site {
+  create_node_order('three_tier', ['database.example.com', ['web1.example.com','web2.example.com','web3.example.com'], 'lb.example.com'])
+}
+```
+
+##### Params
+
+* `title` - The title of the node_order application to create.
+* `nodes` - An array of node layers to order. A node layer can consist of a single node name or an array of node names.
