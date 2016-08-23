@@ -62,7 +62,26 @@ $lb_components.each |$comp_name| {
 ```
 ## Reference
 
+#### `data_capability`
+
+The data_capability type accepts a single parameter data which can be used to
+pass arbitrary data to other other nodes. There is no avilability check. See [examples/data.pp](https://github.com/puppetlabs/puppetlabs-app_modeling/blob/master/examples/data.pp)
+
+##### Parameters
+
+* `data`: Allows user to pass arbitrary data from from one component to another.
+
 ### Types
+
+#### `data_capability`
+
+This type passes information between nodes but has no availability check. It's
+useful if you need to pass data but don't care about whether services are
+actually running.
+
+##### `Parameters`
+
+* `data`: Arbitrary data to produce or consume usually this should be a hash.
 
 #### `dependency`
 
