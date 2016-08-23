@@ -21,7 +21,7 @@ module Puppet::Parser::Functions
     components = params['components']
     components.each do |comp_name, node_names|
       node_names.each do |node_name|
-        comp = Puppet::Resource.new(nil, "#{comp_name}[#{app_name}-#{node_name}]", {})
+        comp = Puppet::Resource.new(nil, "#{comp_name}[#{instance_name}-#{node_name}]", {})
         nodes[node_name] = (nodes[node_name] || []) << comp
       end
     end

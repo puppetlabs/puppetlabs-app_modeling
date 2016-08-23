@@ -135,6 +135,7 @@ site {
   create_component_app('wordpress::app', 'my_wordpress',
     {'db_password' => 'secret',
      'components' => {
+       # These component names must be quoted if defined in puppet code so they parse as strings.
        'Wordpress_app::Database' => ['node1.example.com'],
        'Wordpress_app::Web' => ['node2.example.com', 'node3.example.com', 'node4.example.com'],
        'Wordpress_app::Lb' => ['node4.example.com']
