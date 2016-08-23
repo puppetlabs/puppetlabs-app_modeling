@@ -140,6 +140,46 @@ This function searches the node hash of an application for all nodes that have a
 collect_component_nodes($nodes, Wordpress_app::Web)
 ```
 
+#### `create_component_app`
+
+This function is similiar to the normal application declaration syntax but
+instead of mapping nodes to component instances it maps components to nodes.
+This can make it a lot easier to user applications defined with
+`collect_component_titles` where the same components may be assigned to many
+nodes for availability or scale.  The following two site blocks will result in
+equivalent application declarations:
+
+```puppet
+site {
+  create_component_app('wordpress::app', 'my_wordpress',
+    {'db_password' => 'secret',
+     'components' => {
+       # These component names must be quoted if defined in puppet code so they parse as strings.
+       'Wordpress_app::Database' => ['node1.example.com'],
+       'Wordpress_app::Web' => ['node2.example.com', 'node3.example.com', 'node4.example.com'],
+       'Wordpress_app::Lb' => ['node4.example.com']
+      }
+    })
+}
+
+site {
+  wordpress::app { 'my_wordpress:
+    db_password => 'secret',
+    nodes => {
+      Node['node1.example.com'] => Wordpress_app::Database['my_wordpress-node1.example.com'],
+      Node[node2.example.com'] => Wordpress_app::Web['my_wordpress-node2.example.com'],
+      Node[node3.example.com'] => Wordpress_app::Web['my_wordpress-node3.example.com'],
+      Node[node4.example.com'] => [Wordpress_app::Web['my_wordpress-node4.example.com'],
+                                   Wordpress_app::Lb['my_wordpress-node4.example.com']],
+    }
+  }
+}
+```
+
+The component instances created are given titles
+"${app_instance_name}-${node_name}". This works well if the application
+definition uses collect_component_titles to declare components.
+
 #### `create_node_order`
 
 This function can be used in the site block to create order only applications.
