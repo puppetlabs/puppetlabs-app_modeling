@@ -5,14 +5,14 @@ provider_class = Puppet::Type.type(:http).provider(:http)
 
 describe provider_class do
   describe "validate" do
-    def stub_settings(ip, host, port = 80, ssl = false, path = "/")
+    def stub_settings(ip, host, port = 80, ssl = false, base_path = "/")
       res = stub()
       res.stubs(:[]).with(:ip).returns(ip)
       res.stubs(:[]).with(:host).returns(host)
       res.stubs(:[]).with(:port).returns(port)
       res.stubs(:[]).with(:ssl).returns(ssl)
       res.stubs(:[]).with(:status_codes).returns([200])
-      res.stubs(:[]).with(:path).returns(path)
+      res.stubs(:[]).with(:base_path).returns(base_path)
       subject.stubs(:resource).returns(res)
     end
 

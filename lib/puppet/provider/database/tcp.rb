@@ -1,4 +1,4 @@
-require 'puppet/provider/app_modeling_monitor'
+require_relative '../app_modeling_monitor'
 require 'socket'
 require 'ipaddr'
 

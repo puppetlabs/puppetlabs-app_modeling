@@ -94,9 +94,14 @@ The `http` type allows the following parameters and providers:
 
 ##### Parameters
 
+* `ip`: The external IP address of the HTTP service (default: `127.0.0.1`).
 * `host`: The hostname of the node where the resource is available (default: `127.0.0.1`).
+* `base_path`: The base path the resource is mounted at (default: `\`).
 * `port`: The port where the resource is available (default: `80`).
-* `ip`: The IP adress of the node where the resource is available.
+* `ssl`: Set to true if the HTTP service uses SSL encryption (default: `false`).
+* `timeout`: Time before timing out the resource in seconds (default: `60`).
+* `ping_interval`: Time between retries in seconds (default: `1`).
+* `status_codes`: An array of HTTP status codes that will return success (default: `[200]`).
 
 ##### Providers
 
