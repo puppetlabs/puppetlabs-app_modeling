@@ -60,33 +60,22 @@ $lb_components.each |$comp_name| {
   }
 }
 ```
+
 ## Reference
-
-#### `data_capability`
-
-The data_capability type accepts a single parameter data which can be used to
-pass arbitrary data to other other nodes. There is no avilability check. See [examples/data.pp](https://github.com/puppetlabs/puppetlabs-app_modeling/blob/master/examples/data.pp)
-
-##### Parameters
-
-* `data`: Allows user to pass arbitrary data from from one component to another.
 
 ### Types
 
 #### `data_capability`
 
-This type passes information between nodes but has no availability check. It's
-useful if you need to pass data but don't care about whether services are
-actually running.
+The `data_capability` type accepts a single parameter that can be used to pass arbitrary data to other other nodes. There is no availability check. This is useful if you need to pass data between components but don't care if services are running. See [examples/data.pp](https://github.com/puppetlabs/puppetlabs-app_modeling/blob/master/examples/data.pp).
 
-##### `Parameters`
+##### Parameters
 
-* `data`: Arbitrary data to produce or consume usually this should be a hash.
+* `data`: Arbitrary data to produce or consume component information. This should be a hash.
 
 #### `dependency`
 
-The dependency type passes no information and has no availabilty check. This is
-useful if you only care about order.
+The `dependency` type passes no information between nodes and has no availabilty check. This type is useful if you only care about node run order.
 
 #### `http`
 
@@ -147,12 +136,7 @@ collect_component_nodes($nodes, Wordpress_app::Web)
 
 #### `create_component_app`
 
-This function is similiar to the normal application declaration syntax but
-instead of mapping nodes to component instances it maps components to nodes.
-This can make it a lot easier to user applications defined with
-`collect_component_titles` where the same components may be assigned to many
-nodes for availability or scale.  The following two site blocks will result in
-equivalent application declarations:
+This function is similiar to normal application declaration syntax, but instead of mapping nodes to component instances, this function maps components to nodes. This makes it easier to use applications defined with `collect_component_titles` if the same components are assigned to many nodes for availability or scale. For example, the following example site blocks create equivalent application declarations:
 
 ```puppet
 site {
@@ -181,21 +165,13 @@ site {
 }
 ```
 
-The component instances created are given titles
-"${app_instance_name}-${node_name}". This works well if the application
-definition uses collect_component_titles to declare components.
+The component instances created are given titles `"${app_instance_name}-${node_name}"`. This works well if the application definition uses `collect_component_titles` to declare components.
 
 #### `create_node_order`
 
-This function can be used in the site block to create order only applications.
-It accepts a name for the application and a list of node layers. It creates an
-instance of app_modeling::node_order where the nodes at each layer depend on
-all the nodes in the previous layer.
+This function can be used in site blocks for applications in which the assigned nodes must run in order. This function accepts a title for the application and a list of node layers. It then creates an instance of `app_modeling::node_order` where the nodes at each layer depend on all the nodes in the previous layer.
 
-The following code will create a dependency between two nodes. Whenever these
-nodes are both in an orchestrator job node1 will run before node2. These nodes
-can also be targeted with `puppet job run --application
-App_modeling::Node_order['node1-node2']`.
+The following example creates a dependency between two nodes. Whenever an orchestrator job is run on these nodes, `node1` will always run before `node2`. You can run an orchestrator job on these nodes with `puppet job run --application App_modeling::Node_order['node1-node2']`.
 
 ```puppet
 site {
@@ -203,10 +179,7 @@ site {
 }
 ```
 
-If you have a three layer web application with a database, some app_servers and
-a load balancer the following code would create an application for them. That
-application could then be deployed with orchestrator with `puppet job run
---application App_modeling::Node_order['three_tier']`.
+The following example shows a node run order for a three-layer web application (a database, some application servers, and a load balancer).  You can run an orchestrator job to deploy this application with `puppet job run --application App_modeling::Node_order['three_tier']`.
 
 ```puppet
 site {
@@ -214,7 +187,7 @@ site {
 }
 ```
 
-##### Params
+##### Parameters
 
-* `title` - The title of the node_order application to create.
+* `title` - The title of the application to create.
 * `nodes` - An array of node layers to order. A node layer can consist of a single node name or an array of node names.
