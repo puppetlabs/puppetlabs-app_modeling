@@ -36,7 +36,7 @@ Puppet::Type.newtype :http, :is_capability => true do
     defaultto false
   end
 
-  newparam(:path) do
+  newparam(:base_path) do
     desc 'Path of HTTP resource'
     defaultto "/"
   end

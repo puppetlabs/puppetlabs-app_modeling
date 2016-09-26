@@ -1,4 +1,4 @@
-require 'puppet/provider/app_modeling_monitor'
+require_relative '../app_modeling_monitor'
 require 'net/http'
 require 'uri'
 
@@ -6,7 +6,7 @@ Puppet::Type.type(:http).provide(:http,
                                  :parent => Puppet::Provider::AppModelingMonitor) do
 
   def notice_for_failure(msg)
-    Puppet.notice "Unable to connect to service (#{resource[:ip]}:#{resource[:port]}). #{msg}"
+    Puppet.notice "Unable to connect to service (#{generate_uri}). #{msg}"
     false
   end
 
@@ -28,6 +28,6 @@ Puppet::Type.type(:http).provide(:http,
 
   def generate_uri
     uri_part = (resource[:ssl] ? 'https' : 'http') + "://" + resource[:host] + ":" + resource[:port].to_s
-    URI.join(uri_part, resource[:path])
+    URI.join(uri_part, resource[:base_path])
   end
 end
