@@ -71,7 +71,7 @@ The `data_capability` type accepts a single parameter that can be used to pass a
 
 ##### Parameters
 
-* `data`: Arbitrary data to produce or consume component information. This should be a hash.
+* `data`: Arbitrary data to produce or consume component information. Usually this should be a hash.
 
 #### `dependency`
 
