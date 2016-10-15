@@ -152,7 +152,7 @@ site {
 }
 
 site {
-  wordpress::app { 'my_wordpress:
+  wordpress::app { 'my_wordpress':
     db_password => 'secret',
     nodes => {
       Node['node1.example.com'] => Wordpress_app::Database['my_wordpress-node1.example.com'],
